@@ -166,8 +166,7 @@ module adressed_fifo #(
 ) (
     input logic clock,
     input logic resetn,
-    input logic [adress_width-1:0] active_read_adress,
-    input logic [adress_width-1:0] active_write_adress,
+    input logic [adress_width-1:0] active_adress,
     input tri [data_width-1:0] data_in,
     input logic read_enable,
     input logic write_enable,
@@ -178,8 +177,8 @@ module adressed_fifo #(
     logic inner_read_enable;
     logic inner_write_enable;
 
-    assign inner_read_enable = ((adressed_direction == READ || adressed_direction == READ_N_WRITE) && (active_read_adress == self_adress)) ? read_enable : 0;
-    assign inner_write_enable = ((adressed_direction == WRITE || adressed_direction == READ_N_WRITE) && (active_write_adress == self_adress)) ? write_enable : 0;
+    assign inner_read_enable = ((adressed_direction == READ || adressed_direction == READ_N_WRITE) && (active_adress == self_adress)) ? read_enable : 0;
+    assign inner_write_enable = ((adressed_direction == WRITE || adressed_direction == READ_N_WRITE) && (active_adress == self_adress)) ? write_enable : 0;
 
     fifo #(data_width, length_as_power_of_2) inner(
         .clock(clock), .resetn(resetn), .data_in(data_in),
@@ -190,16 +189,15 @@ endmodule
 
 module tb_rw_adressed_fifo();
     logic clock, resetn;
-    logic [3:0] active_read_adress;
-    logic [3:0] active_write_adress;
+    logic [3:0] active_adress;
     logic [7:0] data_in;
     logic [7:0] data_out;
     logic full, empty;
     logic read_enable, write_enable;
 
     adressed_fifo #(.self_adress('d7), .length_as_power_of_2(2)) rw_fifo(
-        .clock(clock), .resetn(resetn), .active_read_adress(active_read_adress),
-        .active_write_adress(active_write_adress), .data_in(data_in),
+        .clock(clock), .resetn(resetn), .active_adress(active_adress),
+        .data_in(data_in),
         .read_enable(read_enable), .write_enable(write_enable),
         .data_out(data_out), .full(full), .empty(empty)
     );
@@ -207,8 +205,7 @@ module tb_rw_adressed_fifo();
     initial begin
         clock = 0;
         resetn = 0;
-        active_read_adress = 'd7;
-        active_write_adress = 'd7;
+        active_adress = 'd7;
         read_enable = 0;
         write_enable = 0;
         data_in = 0;
