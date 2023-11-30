@@ -27,9 +27,6 @@ module fifo #(parameter width = 8, parameter length_as_power_of_2 = 4) (
 
     always_ff @(posedge clock, posedge resetn) begin
         if (!resetn) begin
-            for (i = 0; i < length; i = i + 1) begin
-                queued[i] <= 0;
-            end
             size <= 0;
             data_out <= 0;
         end else begin
