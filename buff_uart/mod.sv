@@ -1,50 +1,5 @@
 `timescale 1ns/100ps
 
-module fifo_model(fifo_if.DUT fifo_if);
-endmodule
-
-module fifo_driver(fifo_if.DRIVER fifo_actual, fifo_if.DRIVER fifo_model);
-   logic [7:0] data_in;
-   logic read_enable, write_enable;
-
-    initial begin
-        forever begin
-            data_in = $random;
-            read_enable = $random;
-            write_enable = $random;
-
-            fifo_actual.data_in = data_in;
-            fifo_actual.read_enable = read_enable;
-            fifo_actual.write_enable = write_enable;
-
-            fifo_model.data_in = data_in;
-            fifo_model.read_enable = read_enable;
-            fifo_model.write_enable = write_enable;
-
-            #5ns;
-            fifo_actual.clock = ~fifo_actual.clock;
-            fifo_model.clock = ~fifo_model.clock;
-        end
-    end
-endmodule
-
-module fifo_monitor(fifo_if.MONITOR fifo_actual, fifo_if.MONITOR fifo_model);
-    always_ff @(posedge fifo_actual.clock) begin
-        if (fifo_actual.data_out !== fifo_model.data_out) begin
-            $display("Error: Actual output data does not match expected output data");
-        end
-    end
-endmodule
-
-module top2_fifo();
-    fifo_if #(8, 2) fifo_actual();
-    fifo_if #(8, 2) fifo_model();
-    fifo_driver fifo_driver(fifo_actual, fifo_model);
-    fifo fifo(fifo_actual);
-    fifo_model model(fifo_model);
-    fifo_monitor fifo_monitor(fifo_actual, fifo_model);
-endmodule
-
 typedef enum logic [1:0] {READ, WRITE, READ_N_WRITE} ADRESSED_DIRECTION;
 
 module adressed_fifo #(

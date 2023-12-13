@@ -1,4 +1,3 @@
-
 interface fifo_if #(parameter width = 8, parameter length = 16);
     logic clock;
     logic resetn;

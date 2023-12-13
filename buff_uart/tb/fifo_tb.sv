@@ -1,4 +1,3 @@
-
 `include "../fifo.sv"
 
 module tb_fifo();
