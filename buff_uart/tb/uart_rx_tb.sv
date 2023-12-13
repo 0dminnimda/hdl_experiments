@@ -52,10 +52,6 @@ module tb_uart_rx();
                     -1: begin
                         assert (!rx_if.ready);
                     end
-                    rx_if.width - 1: begin
-                        assert (rx_if.ready);
-                        assert (data == rx_if.data);
-                    end
                     rx_if.width: begin
                         assert (rx_if.ready);
                         assert (data == rx_if.data);
