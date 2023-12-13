@@ -1,4 +1,4 @@
-typedef enum logic [1:0] {READ, WRITE, READ_N_WRITE} addressED_DIRECTION;
+typedef enum logic [1:0] {READ, WRITE, READ_N_WRITE} ADDRESSED_DIRECTION;
 
 interface addressable_if #(
     parameter addressed_direction = READ_N_WRITE,
