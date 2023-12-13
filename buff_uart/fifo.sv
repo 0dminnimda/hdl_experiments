@@ -50,3 +50,41 @@ module fifo(fifo_if.DUT fifo_if);
         end
     end
 endmodule
+
+module fifo_model(fifo_if.DUT fifo_if);
+    logic [fifo_if.width-1:0] queued [$:fifo_if.length];
+
+    assign fifo_if.full = (queued.size() >= fifo_if.length);
+    assign fifo_if.empty = (queued.size() == 0);
+
+    logic can_read, can_write;
+
+    assign can_read = fifo_if.read_enable && !fifo_if.full;
+    assign can_write = fifo_if.write_enable && !fifo_if.empty;
+
+    always_ff @(posedge fifo_if.clock, posedge fifo_if.resetn) begin
+        if (!fifo_if.resetn) begin
+            queued.delete();
+            fifo_if.data_out <= 0;
+        end else begin
+            if (fifo_if.read_enable && fifo_if.write_enable) begin
+                if (can_read && can_write) begin
+                    fifo_if.data_out <= queued.pop_front();
+                    queued.push_back(fifo_if.data_in);
+                end else begin
+                    // do not allow to do one action when two are requested
+                    // thus do no actions
+                    fifo_if.data_out <= 0;
+                end
+            end else if (can_read) begin
+                queued.push_back(fifo_if.data_in);
+                fifo_if.data_out <= 0;
+            end else if (can_write) begin
+                fifo_if.data_out <= queued.pop_front();
+            end else begin
+                fifo_if.data_out <= 0;
+            end
+        end
+    end
+endmodule
+
