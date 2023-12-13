@@ -23,10 +23,10 @@ module fifo(fifo_if.DUT fifo_if);
         end else begin
             if (fifo_if.read_enable && fifo_if.write_enable) begin
                 if (can_read && can_write) begin
-                    for (i = 0; i < size; i = i + 1) begin
+                    for (i = 0; i < size - 1; i = i + 1) begin
                         queued[i] <= queued[i+1];
                     end
-                    queued[size] <= fifo_if.data_in;
+                    queued[size - 1] <= fifo_if.data_in;
                     fifo_if.data_out <= queued[0];
                 end else begin
                     // do not allow to do one action when two are requested
