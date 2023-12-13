@@ -58,7 +58,7 @@ module fifo_monitor(fifo_if fifo_actual, fifo_if fifo_model);
 endmodule
 
 module tb_fifo();
-    fifo_if #(8, 4) fifo_actual(), fifo_model();
+    fifo_if #(.width(8), .length(4)) fifo_actual(), fifo_model();
     fifo_driver fifo_driver(fifo_actual, fifo_model);
     fifo fifo(fifo_actual);
     fifo_model model(fifo_model);

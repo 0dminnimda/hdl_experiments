@@ -1,9 +1,9 @@
 `include "../fifo.sv"
 
 module tb_fifo();
-    fifo_if #(8, 4) fifo_if();
-    // fifo fifo(fifo_if);
-    fifo_model fifo(fifo_if);
+    fifo_if #(.width(8), .length(4)) fifo_if();
+    fifo fifo(fifo_if);
+    // fifo_model fifo(fifo_if);
 
     initial begin
         fifo_if.clock = 0;
