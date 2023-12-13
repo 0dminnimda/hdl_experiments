@@ -41,7 +41,6 @@ module fifo(fifo_if.DUT fifo_if);
                 for (i = 0; i < fifo_if.length - 1; i = i + 1) begin
                     queued[i] <= queued[i+1];
                 end
-                queued[fifo_if.length - 1] <= 0;
                 size <= size - 1;
                 fifo_if.data_out <= queued[0];
             end else begin
@@ -87,4 +86,3 @@ module fifo_model(fifo_if.DUT fifo_if);
         end
     end
 endmodule
-
