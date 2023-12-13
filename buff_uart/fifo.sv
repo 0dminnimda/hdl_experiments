@@ -1,6 +1,6 @@
 `include "if/fifo_if.sv"
 
-module fifo(fifo_if.DUT fifo_if);
+module fifo(fifo_if.DUT fifo_if, input logic clock, logic resetn);
     localparam size_width = $clog2(fifo_if.length);
 
     logic [fifo_if.width-1:0] queued [fifo_if.length-1:0];
@@ -16,8 +16,8 @@ module fifo(fifo_if.DUT fifo_if);
 
     integer i;
 
-    always_ff @(posedge fifo_if.clock, posedge fifo_if.resetn) begin
-        if (!fifo_if.resetn) begin
+    always_ff @(posedge clock, posedge resetn) begin
+        if (!resetn) begin
             size <= 0;
             fifo_if.data_out <= 0;
         end else begin
@@ -50,7 +50,7 @@ module fifo(fifo_if.DUT fifo_if);
     end
 endmodule
 
-module fifo_model(fifo_if.DUT fifo_if);
+module fifo_model(fifo_if.DUT fifo_if, input logic clock, logic resetn);
     logic [fifo_if.width-1:0] queued [$:fifo_if.length];
 
     assign fifo_if.full = (queued.size() >= fifo_if.length);
@@ -61,8 +61,8 @@ module fifo_model(fifo_if.DUT fifo_if);
     assign can_read = fifo_if.read_enable && !fifo_if.full;
     assign can_write = fifo_if.write_enable && !fifo_if.empty;
 
-    always_ff @(posedge fifo_if.clock, posedge fifo_if.resetn) begin
-        if (!fifo_if.resetn) begin
+    always_ff @(posedge clock, posedge resetn) begin
+        if (!resetn) begin
             queued.delete();
             fifo_if.data_out <= 0;
         end else begin
