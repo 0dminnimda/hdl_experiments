@@ -3,7 +3,7 @@
 `include "../uart_rx.sv"
 
 module tb_uart_rx();
-    uart_if #(.width(8), .baud_rate(9600), .clock_freq(460800)) rx_if();
+    uart_rx_if #(.width(8), .baud_rate(9600), .clock_freq(460800)) rx_if();
     logic clock, resetn;
 
     localparam nanoseconds_in_second = 10**9;
@@ -22,6 +22,7 @@ module tb_uart_rx();
     initial begin
         clock = 0;
 
+        rx_if.can_receive_next_word = 1;
         rx_if.signal = 1;
         resetn = 0;
 
@@ -31,7 +32,7 @@ module tb_uart_rx();
 
         repeat(1) @(negedge clock);
 
-        repeat(100) @(negedge clock) begin
+        repeat(ticks_per_bit) @(negedge clock) begin
             assert (!rx_if.ready);
         end
 
@@ -68,5 +69,7 @@ module tb_uart_rx();
             // $display("input : ", data, ", result :", rx_if.data);
             repeat($urandom_range(ticks_per_bit/2, ticks_per_bit)) @(negedge clock);
         end
+
+        $finish;
     end
 endmodule
