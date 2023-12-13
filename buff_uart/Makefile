@@ -21,6 +21,7 @@ run:
 		-displaymsgmode tran \
 		-msgmode tran \
 		-wlfdeleteonquit \
+		> /dev/null 2>&1 \
 		&
 
 .PHONY: wlf
