@@ -9,10 +9,8 @@ module fifo(fifo_if.DUT fifo_if, input logic clock, logic resetn);
     assign fifo_if.full = (size >= fifo_if.length);
     assign fifo_if.empty = (size == 0);
 
-    logic can_read, can_write;
-
-    assign can_read = fifo_if.read_enable && !fifo_if.full;
-    assign can_write = fifo_if.write_enable && !fifo_if.empty;
+    assign fifo_if.can_read = fifo_if.read_enable && !fifo_if.full;
+    assign fifo_if.can_write = fifo_if.write_enable && !fifo_if.empty;
 
     integer i;
 
@@ -22,7 +20,7 @@ module fifo(fifo_if.DUT fifo_if, input logic clock, logic resetn);
             fifo_if.data_out <= 0;
         end else begin
             if (fifo_if.read_enable && fifo_if.write_enable) begin
-                if (can_read && can_write) begin
+                if (fifo_if.can_read && fifo_if.can_write) begin
                     for (i = 0; i < size - 1; i = i + 1) begin
                         queued[i] <= queued[i+1];
                     end
@@ -33,11 +31,11 @@ module fifo(fifo_if.DUT fifo_if, input logic clock, logic resetn);
                     // thus do no actions
                     fifo_if.data_out <= 0;
                 end
-            end else if (can_read) begin
+            end else if (fifo_if.can_read) begin
                 queued[size] <= fifo_if.data_in;
                 size <= size + 1;
                 fifo_if.data_out <= 0;
-            end else if (can_write) begin
+            end else if (fifo_if.can_write) begin
                 for (i = 0; i < fifo_if.length - 1; i = i + 1) begin
                     queued[i] <= queued[i+1];
                 end
