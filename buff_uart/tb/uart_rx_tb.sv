@@ -2,6 +2,8 @@
 
 `include "../uart_rx.sv"
 
+// add driver and monitor
+
 module tb_uart_rx();
     uart_rx_if #(.width(8), .baud_rate(9600), .clock_freq(460800)) rx_if();
     logic clock, resetn;

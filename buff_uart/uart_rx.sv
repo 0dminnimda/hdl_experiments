@@ -1,7 +1,13 @@
 `include "if/uart_rx_if.sv"
 
+// make ready one tact
+// make always for each variable
+// check for start and end bit
+// make resetn asyncronous
+
 module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     localparam ticks_per_bit = rx_if.clock_freq / rx_if.baud_rate;
+    localparam half_ticks_per_bit = rx_if.clock_freq / rx_if.baud_rate / 2;
 
     enum logic [1:0] { WAIT_FOR_START_BIT, RECEIVING_DATA, RECEIVING_END } state;
 
@@ -9,7 +15,7 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     logic [$clog2(rx_if.width):0] bit_index;
     logic [$clog2(ticks_per_bit):0] ticks_until_next_action;
 
-    always_ff @(posedge clock) begin
+    always_ff @(posedge clock or negedge resetn) begin
         if(!resetn) begin
             state <= WAIT_FOR_START_BIT;
             ticks_until_next_action <= 0;
@@ -20,7 +26,7 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
             WAIT_FOR_START_BIT: begin
                 rx_if.ready <= 0;
                 if (rx_if.signal == 0 && rx_if.can_receive_next_word) begin
-                    ticks_until_next_action <= ticks_per_bit;
+                    ticks_until_next_action <= ticks_per_bit + half_ticks_per_bit;
                     bit_index <= 0;
                     state <= RECEIVING_DATA;
                 end else begin
