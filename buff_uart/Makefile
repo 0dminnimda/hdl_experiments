@@ -28,6 +28,18 @@ run:
 wlf:
 	vsim -view vsim.wlf
 
+# make compile FILE=tb/addressable_tb.sv
+# make run MODULE=tb_rw_addressable
+
+# make compile FILE=tb/fifo_tb.sv
+# make run MODULE=tb_fifo
+
+# make compile FILE=tb/uart_rx_tb.sv
+# make run MODULE=tb_uart_rx
+
+# make compile FILE=tb/uart_tx_tb.sv
+# make run MODULE=tb_uart_tx
+
 .PHONY: clean
 clean:
 	rm -rf build
