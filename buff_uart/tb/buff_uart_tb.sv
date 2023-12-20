@@ -18,10 +18,6 @@ module tb_buff_uart();
     logic [bui.width-1:0] check_data [1:0];
     logic check_clock;
 
-    // always_ff @(posedge clock, negedge clock) begin
-    //     bui.rx = bui.tx;
-    // end
-
     assign bui.rx = bui.tx;
 
     initial begin
@@ -31,7 +27,6 @@ module tb_buff_uart();
         clock = 0;
         check_clock = 0;
 
-        // bui.rx = 0;
         bui.active_address = 0;
         bui.read_enable = 0;
         bui.write_enable = 0;
@@ -75,47 +70,10 @@ module tb_buff_uart();
 
         assert(bui.data == check_data[0]);
 
-        // repeat(1) @(negedge clock);
-        // repeat(ticks_per_bit) @(negedge clock);
-
-        // bui.active_address = 'd3;
-        // bui.write_enable = 1;
-        // bui.data = check_data[0];
-
-        // repeat(1) @(negedge clock);
-
-        // bui.read_enable = 0;
-
-        // repeat(2) @(negedge clock);
-
-        // for (int index = -1; index <= bui.width; index++) begin
-        //     repeat(ticks_per_bit) @(negedge clock) begin
-        //         case (index)
-        //             -1:        assert(bui.tx == 0);
-        //             bui.width: assert(bui.tx == 1);
-        //             default:   assert(bui.tx == check_data[0][index]);
-        //         endcase
-        //     end
-        // end
-
-        while (1) begin            
-            repeat(1) @(negedge clock);
-        end
-
-        // check_clock = ~check_clock;
-
-        // repeat(1) @(negedge clock);
-
-        // // bui.data = check_data[1];
-        // // check_clock = ~check_clock;
-
-        // // repeat(1) @(negedge clock);
-
-        // // bui.read_enable = 0;
-
-        // while (1) begin
+        // while (1) begin            
         //     repeat(1) @(negedge clock);
         // end
-        // // $finish;
+
+        $finish;
     end
 endmodule

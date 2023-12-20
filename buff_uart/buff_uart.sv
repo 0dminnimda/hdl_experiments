@@ -56,11 +56,9 @@ module buff_uart (
     assign rx_addr_if.active_address = bui.active_address;
     assign tx_addr_if.active_address = bui.active_address;
 
-    // assign rx_addr_if.read_enable_in = bui.read_enable;
     assign rx_addr_if.write_enable_in = bui.write_enable;
     assign rx_fifo_if.write_enable = rx_addr_if.write_enable_out;
 
-    // assign tx_addr_if.write_enable_in = bui.write_enable;
     assign tx_addr_if.read_enable_in = bui.read_enable;
     assign tx_fifo_if.read_enable = tx_addr_if.read_enable_out;
 
