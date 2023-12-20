@@ -3,10 +3,10 @@
 `include "../addressable.sv"
 
 module tb_rw_addressable();
-    localparam logic self_address = 'd7;
-    localparam logic address_width = 4;
+    localparam address_width = 4;
+    localparam self_address = 'd7;
 
-    addressable_if #(.addressed_direction(READ_N_WRITE), .self_address(self_address), .address_width(address_width)) addr();
+    addressable_if #(.addressed_direction(READ_N_WRITE), .address_width(address_width), .self_address(self_address)) addr();
     addressable addressable(addr);
 
     initial begin

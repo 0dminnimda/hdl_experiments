@@ -24,15 +24,15 @@ module buff_uart (
 
     addressable_if #(
         .addressed_direction(READ),
-        .self_address(bui.tx_address),
-        .address_width(bui.address_width)
+        .address_width(bui.address_width),
+        .self_address(bui.rx_address)
     ) rx_addr_if();
     addressable rx_addr(rx_addr_if);
 
     addressable_if #(
         .addressed_direction(WRITE),
-        .self_address(bui.rx_address),
-        .address_width(bui.address_width)
+        .address_width(bui.address_width),
+        .self_address(bui.tx_address)
     ) tx_addr_if();
     addressable tx_addr(tx_addr_if);
 

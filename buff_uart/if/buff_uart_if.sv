@@ -1,9 +1,9 @@
 interface buff_uart_if #(parameter
     width = 8,
     fifo_length = 4,
+    address_width = 4,
     rx_address = 0,
     tx_address = 0,
-    address_width = 4,
     baud_rate = 9600,
     clock_freq = 460800
 );
