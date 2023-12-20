@@ -61,7 +61,7 @@ module buff_uart (
 
     // assign bui.data = rx_fifo_if.can_write ? rx_fifo_if.data_out : 'z;
     // assign tx_fifo_if.data_in = tx_fifo_if.can_read ? bui.data : 0;
-    always_ff @(posedge clock) begin
+    always_ff @(posedge clock, negedge resetn) begin
         if (rx_fifo_if.can_write) begin
             bui.data <= rx_fifo_if.data_out;
         end

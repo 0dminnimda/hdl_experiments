@@ -9,7 +9,7 @@ module uart_tx (uart_tx_if.DUT tx_if, input logic clock, logic resetn);
     logic [$clog2(tx_if.width):0] bit_index;
     logic [$clog2(ticks_per_bit):0] ticks_until_next_action;
 
-    always_ff @(posedge clock) begin
+    always_ff @(posedge clock, negedge resetn) begin
         if(!resetn) begin
             state <= WAIT_FOR_PREMISSION;
             ticks_until_next_action <= 0;
