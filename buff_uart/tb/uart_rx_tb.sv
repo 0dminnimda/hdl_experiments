@@ -20,6 +20,8 @@ module tb_uart_rx();
     localparam ticks_per_bit = rx_if.clock_freq / rx_if.baud_rate;
 
     logic [rx_if.width-1:0] data = 0;
+    logic was_ready;
+    logic was_ready_once;
 
     initial begin
         clock = 0;
@@ -48,26 +50,33 @@ module tb_uart_rx();
                     default:     rx_if.signal = data[index];
                 endcase
 
-                repeat(ticks_per_bit) @(negedge clock);
+                was_ready = 0;
+                was_ready_once = 1;
+                repeat(ticks_per_bit) @(negedge clock) begin
+                    if (rx_if.ready) begin
+                        if (was_ready) was_ready_once = 0;
+                        was_ready = 1;
+                        assert (data == rx_if.data);
+                    end
+                end
 
                 case (index)
                     -1: begin
-                        assert (!rx_if.ready);
+                        assert (!was_ready);
                     end
                     rx_if.width: begin
-                        // TODO: check it was triggered once in the period
-                        // assert (rx_if.ready);
-                        assert (data == rx_if.data);
+                        assert (was_ready);
+                        assert (was_ready_once);
                     end
                     default: begin
-                        assert (!rx_if.ready);
+                        assert (!was_ready);
                     end
                 endcase
 
             end
 
             // $display("input : ", data, ", result :", rx_if.data);
-            repeat($urandom_range(ticks_per_bit/2, ticks_per_bit)) @(negedge clock);
+            repeat($urandom_range(ticks_per_bit, ticks_per_bit*2)) @(negedge clock);
         end
 
         $finish;

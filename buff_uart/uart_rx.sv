@@ -1,6 +1,5 @@
 `include "if/uart_rx_if.sv"
 
-// make always for each variable
 // check for start and end bit
 
 module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
@@ -10,7 +9,7 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     enum logic [1:0] { WAIT_FOR_START_BIT, RECEIVING_DATA, RECEIVING_END } state;
 
     logic [rx_if.width-1:0] bits;
-    logic [$clog2(rx_if.width):0] bit_index;
+    logic [$clog2(rx_if.width):0] bit_count;
     logic [$clog2(ticks_per_bit):0] ticks_until_next_action;
 
     logic action;
@@ -19,34 +18,34 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     logic signal;
     assign signal = rx_if.signal == 0 && rx_if.can_receive_next_word;
 
+    logic reading_the_last_bit;
+    assign reading_the_last_bit = bit_count >= rx_if.width - 1;
+
     always_ff @(posedge clock) begin
         if (action) case(state)
             WAIT_FOR_START_BIT: begin
                 if (signal) begin
                     ticks_until_next_action <= ticks_per_bit + half_ticks_per_bit;
-                    bit_index <= 0;
                 end else begin
                     ticks_until_next_action <= 0;
                 end
             end
+            RECEIVING_DATA: ticks_until_next_action <= ticks_per_bit;
+            RECEIVING_END: ticks_until_next_action <= ticks_per_bit;
+            default: ticks_until_next_action <= 0;
+        endcase
+    end
 
-            RECEIVING_DATA: begin
-                bits[bit_index] <= rx_if.signal;
-                if (bit_index < rx_if.width - 1) begin
-                    ticks_until_next_action <= ticks_per_bit;
-                    bit_index <= bit_index + 1;
-                end else begin
-                    ticks_until_next_action <= ticks_per_bit;
-                end
-            end
+    always_ff @(posedge clock) begin
+        if (action) case(state)
+            RECEIVING_DATA: bits = {rx_if.signal, bits[rx_if.width-1:1]};
+        endcase
+    end
 
-            RECEIVING_END: begin
-                ticks_until_next_action <= ticks_per_bit;
-            end
-
-            default: begin
-                ticks_until_next_action <= 0;
-            end
+    always_ff @(posedge clock) begin
+        if (action) case(state)
+            WAIT_FOR_START_BIT: if (signal) bit_count <= 0;
+            RECEIVING_DATA: bit_count <= bit_count + 1;
         endcase
     end
 
@@ -59,7 +58,7 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     end
 
     always_ff @(posedge clock) begin
-        case(state)
+        if (action) case(state)
             RECEIVING_END: rx_if.data <= bits;
         endcase
     end
@@ -69,7 +68,7 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
             state <= WAIT_FOR_START_BIT;
         end else if (action) case(state)
             WAIT_FOR_START_BIT: if (signal) state <= RECEIVING_DATA;
-            RECEIVING_DATA: if (!(bit_index < rx_if.width - 1)) state <= RECEIVING_END;
+            RECEIVING_DATA: if (reading_the_last_bit) state <= RECEIVING_END;
             RECEIVING_END: state <= WAIT_FOR_START_BIT;
             default: state <= WAIT_FOR_START_BIT;
         endcase
