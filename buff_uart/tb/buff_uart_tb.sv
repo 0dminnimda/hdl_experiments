@@ -18,25 +18,11 @@ module tb_buff_uart();
     logic [bui.width-1:0] check_data [1:0];
     logic check_clock;
 
-    // initial begin
-    //     check_data[0] = 'b1010;
-    //     check_data[1] = 'b111110;
-
-    //     for (int i = 0; i < 2; i++) begin
-    //         repeat(1) @(posedge check_clock or negedge check_clock);
-
-    //         for (int index = -1; index <= bui.width; index++) begin
-    //             case (index)
-    //                 -1:        bui.rx = 0;
-    //                 bui.width: bui.rx = 1;
-    //                 default:   bui.rx = check_data[i][index];
-    //             endcase
-
-    //             repeat(ticks_per_bit) @(negedge clock);
-    //         end
-    //     end
-
+    // always_ff @(posedge clock, negedge clock) begin
+    //     bui.rx = bui.tx;
     // end
+
+    assign bui.rx = bui.tx;
 
     initial begin
         check_data[0] = 'b1010;
@@ -45,7 +31,7 @@ module tb_buff_uart();
         clock = 0;
         check_clock = 0;
 
-        bui.rx = 0;
+        // bui.rx = 0;
         bui.active_address = 0;
         bui.read_enable = 0;
         bui.write_enable = 0;
@@ -78,6 +64,39 @@ module tb_buff_uart();
                 endcase
             end
         end
+
+        repeat(1) @(negedge clock);
+
+        bui.active_address = 'd3;
+        bui.read_enable = 0;
+        bui.write_enable = 1;
+
+        repeat(1) @(negedge clock);
+
+        assert(bui.data == check_data[0]);
+
+        // repeat(1) @(negedge clock);
+        // repeat(ticks_per_bit) @(negedge clock);
+
+        // bui.active_address = 'd3;
+        // bui.write_enable = 1;
+        // bui.data = check_data[0];
+
+        // repeat(1) @(negedge clock);
+
+        // bui.read_enable = 0;
+
+        // repeat(2) @(negedge clock);
+
+        // for (int index = -1; index <= bui.width; index++) begin
+        //     repeat(ticks_per_bit) @(negedge clock) begin
+        //         case (index)
+        //             -1:        assert(bui.tx == 0);
+        //             bui.width: assert(bui.tx == 1);
+        //             default:   assert(bui.tx == check_data[0][index]);
+        //         endcase
+        //     end
+        // end
 
         while (1) begin            
             repeat(1) @(negedge clock);

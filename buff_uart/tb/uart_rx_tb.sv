@@ -76,7 +76,7 @@ module tb_uart_rx();
             end
 
             // $display("input : ", data, ", result :", rx_if.data);
-            repeat($urandom_range(ticks_per_bit, ticks_per_bit*2)) @(negedge clock);
+            repeat($urandom_range(ticks_per_bit/2, ticks_per_bit)) @(negedge clock);
         end
 
         $finish;

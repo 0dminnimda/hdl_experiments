@@ -1,6 +1,6 @@
 interface buff_uart_if #(parameter
     width = 8,
-    fifo_length = 4,
+    fifo_length = 16,
     address_width = 4,
     rx_address = 0,
     tx_address = 0,

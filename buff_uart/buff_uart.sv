@@ -40,7 +40,8 @@ module buff_uart (
     assign bui.tx = tx_if.signal;
 
     always_ff @(posedge clock) begin
-        rx_fifo_if.read_enable <= rx_if.ready && !tx_fifo_if.full;
+        rx_fifo_if.read_enable <= !rx_fifo_if.full;
+        // rx_fifo_if.read_enable <= rx_if.ready && !rx_fifo_if.full;
         tx_fifo_if.write_enable <= tx_if.ready && !tx_fifo_if.empty;
     end
 
