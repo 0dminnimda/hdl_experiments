@@ -23,14 +23,14 @@ module buff_uart (
     fifo tx_fifo(.fifo_if(tx_fifo_if), .clock(clock), .resetn(resetn));
 
     addressable_if #(
-        .addressed_direction(READ),
+        .addressed_direction(WRITE),
         .address_width(bui.address_width),
         .self_address(bui.rx_address)
     ) rx_addr_if();
     addressable rx_addr(rx_addr_if);
 
     addressable_if #(
-        .addressed_direction(WRITE),
+        .addressed_direction(READ),
         .address_width(bui.address_width),
         .self_address(bui.tx_address)
     ) tx_addr_if();
@@ -39,11 +39,15 @@ module buff_uart (
     assign rx_if.signal = bui.rx;
     assign bui.tx = tx_if.signal;
 
-    assign rx_fifo_if.read_enable = rx_if.ready;
-    assign tx_fifo_if.write_enable = tx_if.ready;
+    always_ff @(posedge clock) begin
+        rx_fifo_if.read_enable <= rx_if.ready && !tx_fifo_if.full;
+        tx_fifo_if.write_enable <= tx_if.ready && !tx_fifo_if.empty;
+    end
 
-    assign rx_if.can_receive_next_word = rx_fifo_if.can_read;
-    assign tx_if.can_send_next_word = tx_fifo_if.can_write;
+    always_ff @(posedge clock) begin
+        rx_if.can_receive_next_word <= rx_fifo_if.can_read;
+        tx_if.can_send_next_word <= tx_fifo_if.can_write;
+    end
 
     assign rx_fifo_if.data_in = rx_if.data;
     assign tx_if.data = tx_fifo_if.data_out;
@@ -60,13 +64,12 @@ module buff_uart (
     assign tx_fifo_if.read_enable = tx_addr_if.read_enable_out;
 
     // assign bui.data = rx_fifo_if.can_write ? rx_fifo_if.data_out : 'z;
-    // assign tx_fifo_if.data_in = tx_fifo_if.can_read ? bui.data : 0;
-    always_ff @(posedge clock, negedge resetn) begin
+    always_ff @(posedge clock) begin
         if (rx_fifo_if.can_write) begin
             bui.data <= rx_fifo_if.data_out;
         end
-        if (tx_fifo_if.can_read) begin
-            tx_fifo_if.data_in <= bui.data;
-        end
+    end
+    always_comb begin
+        tx_fifo_if.data_in = bui.data;
     end
 endmodule

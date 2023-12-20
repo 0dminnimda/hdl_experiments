@@ -40,6 +40,9 @@ wlf:
 # make compile FILE=tb/uart_tx_tb.sv
 # make run MODULE=tb_uart_tx
 
+# make compile FILE=tb/buff_uart_tb.sv
+# make run MODULE=tb_buff_uart
+
 .PHONY: clean
 clean:
 	rm -rf build

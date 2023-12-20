@@ -63,19 +63,25 @@ module tb_buff_uart();
         bui.read_enable = 1;
         bui.data = check_data[0];
 
+        repeat(1) @(negedge clock);
+
+        bui.read_enable = 0;
+
+        repeat(2) @(negedge clock);
+
+        for (int index = -1; index <= bui.width; index++) begin
+            repeat(ticks_per_bit) @(negedge clock) begin
+                case (index)
+                    -1:        assert(bui.tx == 0);
+                    bui.width: assert(bui.tx == 1);
+                    default:   assert(bui.tx == check_data[0][index]);
+                endcase
+            end
+        end
+
         while (1) begin            
             repeat(1) @(negedge clock);
         end
-
-        // for (int index = -1; index <= bui.width; index++) begin
-        //     case (index)
-        //         -1:        bui.rx = 0;
-        //         bui.width: bui.rx = 1;
-        //         default:   bui.rx = check_data[0][index];
-        //     endcase
-
-        //     repeat(ticks_per_bit) @(negedge clock);
-        // end
 
         // check_clock = ~check_clock;
 
