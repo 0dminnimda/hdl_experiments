@@ -30,7 +30,7 @@ module tb_buff_uart();
         bui.active_address = 0;
         bui.read_enable = 0;
         bui.write_enable = 0;
-        bui.data = 0;
+        bui.data_in = 0;
 
         resetn = 0;
 
@@ -42,7 +42,7 @@ module tb_buff_uart();
 
         bui.active_address = 'd4;
         bui.read_enable = 1;
-        bui.data = check_data[0];
+        bui.data_in = check_data[0];
 
         repeat(1) @(negedge clock);
 
@@ -68,7 +68,7 @@ module tb_buff_uart();
 
         repeat(1) @(negedge clock);
 
-        assert(bui.data == check_data[0]);
+        assert(bui.data_out == check_data[0]);
 
         // while (1) begin            
         //     repeat(1) @(negedge clock);

@@ -62,13 +62,6 @@ module buff_uart (
     assign tx_addr_if.read_enable_in = bui.read_enable;
     assign tx_fifo_if.read_enable = tx_addr_if.read_enable_out;
 
-    // assign bui.data = rx_fifo_if.can_write ? rx_fifo_if.data_out : 'z;
-    always_ff @(posedge clock) begin
-        if (rx_fifo_if.can_write) begin
-            bui.data <= rx_fifo_if.data_out;
-        end
-    end
-    always_comb begin
-        tx_fifo_if.data_in = bui.data;
-    end
+    assign bui.data_out = rx_fifo_if.data_out;
+    assign tx_fifo_if.data_in = bui.data_in;
 endmodule

@@ -14,10 +14,11 @@ interface buff_uart_if #(parameter
     logic write_enable;
 
     logic [address_width-1:0] active_address;
-    logic [width-1:0] data;
+    logic [width-1:0] data_in;
+    logic [width-1:0] data_out;
 
     modport DUT (
-        input rx, active_address, read_enable, write_enable,
-        output tx, data
+        input rx, data_in, active_address, read_enable, write_enable,
+        output tx, data_out
     );
 endinterface
