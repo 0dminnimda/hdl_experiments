@@ -39,7 +39,7 @@ package my_pkg;
       my_transaction tract;
       bit status = 1;
       $cast(tract, rhs);
-      status &= (rx  == tract.rx);
+      status &= (rx == tract.rx);
       status &= (read_enable == tract.read_enable);
       status &= (write_enable == tract.write_enable);
       status &= (active_address == tract.active_address);
