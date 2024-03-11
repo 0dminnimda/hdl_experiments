@@ -21,8 +21,7 @@ class buff_uart_rx_agent extends uvm_agent;
     m_sequencer = buff_uart_rx_sequencer::type_id::create("m_sequencer", this);
   endfunction
 
-
   function void connect_phase(uvm_phase phase);
-    if (conf.is_active == UVM_ACTIVE) drvh.seq_item_port.connect(m_sequencer.seq_item_export);
+    drvh.seq_item_port.connect(m_sequencer.seq_item_export);
   endfunction
 endclass : buff_uart_rx_agent

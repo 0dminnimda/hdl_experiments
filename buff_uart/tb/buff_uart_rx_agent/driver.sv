@@ -1,7 +1,7 @@
 class buff_uart_rx_driver extends uvm_driver #(buff_uart_rx_sequence_item);
   `uvm_component_utils(buff_uart_rx_driver)
 
-  virtual uart_interface vif;
+  virtual buff_uart_if vif;
   buff_uart_rx_config conf;
   int ticks_per_bit;
 

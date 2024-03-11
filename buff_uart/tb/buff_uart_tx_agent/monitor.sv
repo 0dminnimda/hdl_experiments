@@ -1,20 +1,20 @@
-class buff_uart_rx_monitor extends uvm_monitor;
-  `uvm_component_utils(buff_uart_rx_monitor)
+class buff_uart_tx_monitor extends uvm_monitor;
+  `uvm_component_utils(buff_uart_tx_monitor)
 
   virtual buff_uart_if vif;
-  buff_uart_rx_config conf;
-  buff_uart_rx_sequence_item data_recv;
+  buff_uart_tx_config conf;
+  buff_uart_tx_sequence_item data_recv;
 
-  uvm_analysis_port #(buff_uart_rx_sequence_item) monitor_port;
+  uvm_analysis_port #(buff_uart_tx_sequence_item) monitor_port;
 
-  function new(string name = "buff_uart_rx_monitor", uvm_component parent);
+  function new(string name = "buff_uart_tx_monitor", uvm_component parent);
     super.new(name, parent);
     monitor_port = new("monitor_port", this);
   endfunction
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(buff_uart_rx_config)::get(this, "", "buff_uart_rx_config", conf))
+    if (!uvm_config_db#(buff_uart_tx_config)::get(this, "", "buff_uart_tx_config", conf))
       `uvm_fatal("CONFIG", "Cannot get() conf from uvm_config_db. Have you set() it?")
   endfunction
 
@@ -29,11 +29,11 @@ class buff_uart_rx_monitor extends uvm_monitor;
   endtask
 
   task collect_data();
-    data_recv = buff_uart_rx_sequence_item::type_id::create("data_recv");
+    data_recv = buff_uart_tx_sequence_item::type_id::create("data_recv");
     @(negedge vif.clk);
     if (!vif.reset_n) begin
-      data_recv.rx <= vif.rx;
+      data_recv.tx <= vif.tx;
       monitor_port.write(data_recv);
     end
   endtask
-endclass : buff_uart_rx_monitor
+endclass : buff_uart_tx_monitor
