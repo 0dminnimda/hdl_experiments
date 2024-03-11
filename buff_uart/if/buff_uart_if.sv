@@ -7,6 +7,9 @@ interface buff_uart_if #(parameter
     baud_rate = 9600,
     clock_freq = 460800
 );
+    logic clock;
+    logic resetn;
+
     logic rx;
     logic tx;
 
@@ -18,7 +21,7 @@ interface buff_uart_if #(parameter
     logic [width-1:0] data_out;
 
     modport DUT (
-        input rx, data_in, active_address, read_enable, write_enable,
+        input rx, data_in, active_address, read_enable, write_enable, clock, resetn,
         output tx, data_out
     );
 endinterface
