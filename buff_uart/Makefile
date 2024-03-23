@@ -43,6 +43,15 @@ wlf:
 # make compile FILE=tb/buff_uart_tb.sv
 # make run MODULE=tb_buff_uart
 
+.PHONY: verilator
+verilator:
+	/usr/local/bin/verilator --binary -j 0 tb/buff_uart_tb.sv -I. -Iif -Itb --top-module tb_buff_uart --assert \
+		-Wno-CASEINCOMPLETE -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND -Wno-BLKLOOPINIT -Wno-MULTIDRIVEN
+
+.PHONY: verilator_run
+verilator_run:
+	./obj_dir/Vtb_buff_uart
+
 .PHONY: clean
 clean:
 	rm -rf build
