@@ -9,6 +9,7 @@ class env_config extends uvm_object;
     super.new(name);
   endfunction : new
 endclass : env_config
+
 class uart_env extends uvm_env;
   `uvm_component_utils(uart_env)
 

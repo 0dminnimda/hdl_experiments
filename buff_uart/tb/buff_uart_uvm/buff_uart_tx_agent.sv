@@ -19,6 +19,7 @@ class buff_uart_tx_agent extends uvm_agent;
     monh = buff_uart_tx_monitor::type_id::create("monh", this);
   endfunction
 endclass : buff_uart_tx_agent
+
 class buff_uart_tx_agent_top extends uvm_env;
   `uvm_component_utils(buff_uart_tx_agent_top)
 
@@ -39,6 +40,7 @@ class buff_uart_tx_agent_top extends uvm_env;
     super.build_phase(phase);
   endfunction
 endclass : buff_uart_tx_agent_top
+
 class buff_uart_tx_config extends uvm_object;
   `uvm_object_utils(buff_uart_tx_config)
 
@@ -48,6 +50,7 @@ class buff_uart_tx_config extends uvm_object;
     super.new(name);
   endfunction
 endclass
+
 class buff_uart_tx_driver extends uvm_driver #(buff_uart_tx_sequence_item);
   `uvm_component_utils(buff_uart_tx_driver)
 
@@ -55,6 +58,7 @@ class buff_uart_tx_driver extends uvm_driver #(buff_uart_tx_sequence_item);
     super.new(name, parent);
   endfunction
 endclass : buff_uart_tx_driver
+
 class buff_uart_tx_monitor extends uvm_monitor;
   `uvm_component_utils(buff_uart_tx_monitor)
 
@@ -94,6 +98,7 @@ class buff_uart_tx_monitor extends uvm_monitor;
     end
   endtask
 endclass : buff_uart_tx_monitor
+
 class buff_uart_tx_sequence extends uvm_sequence #(buff_uart_tx_sequence_item);
   `uvm_object_utils(buff_uart_tx_sequence)
 
@@ -124,8 +129,8 @@ class buff_uart_tx_sequence extends uvm_sequence #(buff_uart_tx_sequence_item);
     //   `uvm_do_with(req, { din == i; act == NORMAL; })
     // end
   endtask
-
 endclass : buff_uart_tx_sequence
+
 class buff_uart_tx_sequence_item extends uvm_sequence_item;
   rand bit tx;
 
@@ -138,6 +143,7 @@ class buff_uart_tx_sequence_item extends uvm_sequence_item;
   endfunction
 
 endclass : buff_uart_tx_sequence_item
+
 class buff_uart_tx_sequencer extends uvm_sequencer #(buff_uart_tx_sequence_item);
   `uvm_component_utils(buff_uart_tx_sequencer)
 
