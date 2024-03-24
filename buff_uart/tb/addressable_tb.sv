@@ -1,6 +1,10 @@
 `timescale 1ns/100ps
 
+`ifndef EDAPLAYGROUND
 `include "../addressable.sv"
+`else
+`include "addressable.sv"
+`endif
 
 module tb_rw_addressable();
     localparam address_width = 4;

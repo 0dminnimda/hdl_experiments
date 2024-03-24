@@ -1,6 +1,10 @@
 `timescale 1ns/100ps
 
+`ifndef EDAPLAYGROUND
 `include "../uart_rx.sv"
+`else
+`include "uart_rx.sv"
+`endif
 
 // add driver and monitor
 

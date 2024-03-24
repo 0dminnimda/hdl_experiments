@@ -2,6 +2,8 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
+`ifndef EDAPLAYGROUND
+
 `include "../env/env_config.sv"
 `include "../env/uart_env.sv"
 
@@ -24,6 +26,34 @@ import uvm_pkg::*;
 `include "../buff_uart_rx_agent/buff_uart_rx_agent_top.sv"
 
 `include "../test/base_test.sv"
+
+`else
+
+`include "env_config.sv"
+`include "uart_env.sv"
+
+`include "buff_uart_tx_sequence_item.sv"
+`include "buff_uart_tx_config.sv"
+`include "buff_uart_tx_driver.sv"
+`include "buff_uart_tx_monitor.sv"
+`include "buff_uart_tx_sequencer.sv"
+`include "buff_uart_tx_agent.sv"
+`include "buff_uart_tx_agent_top.sv"
+`include "buff_uart_tx_sequence.sv"
+
+`include "buff_uart_rx_sequence_item.sv"
+`include "buff_uart_rx_config.sv"
+`include "buff_uart_rx_driver.sv"
+`include "buff_uart_rx_monitor.sv"
+`include "buff_uart_rx_sequencer.sv"
+`include "buff_uart_rx_sequence.sv"
+`include "buff_uart_rx_agent.sv"
+`include "buff_uart_rx_agent_top.sv"
+
+`include "base_test.sv"
+
+`endif
+
 
 `timescale 1us / 1us
 

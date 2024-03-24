@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "if/uart_tx_if.sv"
+`else
+`include "uart_tx_if.sv"
+`endif
 
 module uart_tx (uart_tx_if.DUT tx_if, input logic clock, logic resetn);
     localparam ticks_per_bit = tx_if.clock_freq / tx_if.baud_rate;

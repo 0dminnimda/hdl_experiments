@@ -1,6 +1,10 @@
 `timescale 1ns/100ps
 
+`ifndef EDAPLAYGROUND
 `include "../uart_tx.sv"
+`else
+`include "uart_tx.sv"
+`endif
 
 module tb_uart_tx();
     uart_tx_if #(.width(8), .baud_rate(9600), .clock_freq(460800)) tx_if();

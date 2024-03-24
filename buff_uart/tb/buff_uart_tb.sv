@@ -1,4 +1,9 @@
+`ifndef EDAPLAYGROUND
 `include "../buff_uart.sv"
+`else
+`include "buff_uart.sv"
+`endif
+
 
 module tb_buff_uart();
     localparam baud_rate = 9600;

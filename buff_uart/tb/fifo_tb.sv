@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "../fifo.sv"
+`else
+`include "fifo.sv"
+`endif
 
 module tb_fifo();
     logic clock, resetn;

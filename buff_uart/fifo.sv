@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "if/fifo_if.sv"
+`else
+`include "fifo_if.sv"
+`endif
 
 module fifo(fifo_if.DUT fifo_if, input logic clock, logic resetn);
     localparam size_width = $clog2(fifo_if.length);

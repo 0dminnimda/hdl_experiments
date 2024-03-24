@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "if/addressable_if.sv"
+`else
+`include "addressable_if.sv"
+`endif
 
 module addressable(addressable_if.DUT addr);
     localparam allowed_to_read = addr.addressed_direction == READ || addr.addressed_direction == READ_N_WRITE;

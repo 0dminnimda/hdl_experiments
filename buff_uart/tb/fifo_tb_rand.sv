@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "../fifo.sv"
+`else
+`include "fifo.sv"
+`endif
 
 module driver(fifo_if fifo_actual, fifo_if fifo_model, output logic clock, logic resetn);
     logic [7:0] data_in;

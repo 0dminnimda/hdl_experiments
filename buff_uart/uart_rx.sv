@@ -1,4 +1,8 @@
+`ifndef EDAPLAYGROUND
 `include "if/uart_rx_if.sv"
+`else
+`include "uart_rx_if.sv"
+`endif
 
 module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     localparam ticks_per_bit = rx_if.clock_freq / rx_if.baud_rate;

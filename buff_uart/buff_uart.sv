@@ -1,6 +1,10 @@
 `timescale 1ns/100ps
 
+`ifndef EDAPLAYGROUND
 `include "if/buff_uart_if.sv"
+`else
+`include "buff_uart_if.sv"
+`endif
 `include "uart_rx.sv"
 `include "uart_tx.sv"
 `include "fifo.sv"

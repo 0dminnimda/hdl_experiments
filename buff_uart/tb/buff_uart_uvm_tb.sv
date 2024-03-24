@@ -1,5 +1,9 @@
 `include "uvm_macros.svh"
+`ifndef EDAPLAYGROUND
 `include "../buff_uart.sv"
+`else
+`include "buff_uart.sv"
+`endif
 
 package my_pkg;
 
