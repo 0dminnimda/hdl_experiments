@@ -15,31 +15,36 @@ import uvm_pkg::*;
 `include "buff_uart_rx_agent.sv"
 `include "base_test.sv"
 
-module buff_uart_tb_top;
-  uvm_root _UVM_Root;
+
+module top;
+  import uvm_pkg::*;
 
   buff_uart_if #(
       .rx_address('d3),
       .tx_address('d4)
   ) bui ();
+  logic clock, resetn;
+
+  buff_uart dut (
+      bui,
+      clock,
+      resetn
+  );
 
   localparam nanoseconds_in_second = 10 ** 9;
   localparam clock_period = nanoseconds_in_second / bui.clock_freq;
 
-  always #(clock_period / 2) begin
-    bui.clock = ~bui.clock;
-  end
-
-  buff_uart dut (bui);
-
   initial begin
-    bui.clock = 0;
+    clock = 0;
+    forever #(clock_period / 2) clock = ~clock;
   end
 
   initial begin
-    _UVM_Root = uvm_root::get();
-    // factory.print();
-    uvm_config_db#(virtual uart_interface)::set(null, "*", "vif_0", intf);
-    _UVM_Root.run_test("base_test");
+    uvm_config_db#(virtual buff_uart_if)::set(null, "*", "buff_uart_if", bui);
+
+    uvm_top.finish_on_completion = 1;
+
+    run_test("base_test");
   end
-endmodule
+
+endmodule : top
