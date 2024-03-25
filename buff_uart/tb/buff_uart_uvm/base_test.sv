@@ -4,8 +4,8 @@ class base_test extends uvm_test;
   virtual buff_uart_if vif;
   uart_env envh;
   env_config env_conf;
-  buff_uart_tx_config tx_conf;
-  buff_uart_rx_config rx_conf;
+  // buff_uart_tx_config tx_conf;
+  // buff_uart_rx_config rx_conf;
 
   function new(string name = "base_test", uvm_component parent);
     super.new(name, parent);
@@ -34,12 +34,10 @@ class base_test extends uvm_test;
   endfunction
 
   task run_phase(uvm_phase phase);
-    buff_uart_tx_sequence send_req;
     buff_uart_rx_sequence recv_req;
     send_req = new("send_seq");
     recv_req = new("recv_req");
     phase.raise_objection(this);
-    send_req.start(envh.tx_top.tx_agent.m_sequencer);
     recv_req.start(envh.rx_top.rx_agent.m_sequencer);
     phase.drop_objection(this);
   endtask
