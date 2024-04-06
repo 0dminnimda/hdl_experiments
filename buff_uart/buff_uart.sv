@@ -65,4 +65,7 @@ module buff_uart (buff_uart_if.DUT bui);
 
     assign bui.data_out = rx_fifo_if.data_out;
     assign tx_fifo_if.data_in = bui.data_in;
+
+    assign bui.rx_fifo_not_empty = !rx_fifo_if.empty;
+    assign bui.tx_fifo_not_full = !tx_fifo_if.full;
 endmodule

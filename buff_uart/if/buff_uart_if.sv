@@ -20,8 +20,11 @@ interface buff_uart_if #(parameter
     logic [width-1:0] data_in;
     logic [width-1:0] data_out;
 
+    logic rx_fifo_not_empty;
+    logic tx_fifo_not_full;
+
     modport DUT (
         input rx, data_in, active_address, read_enable, write_enable, clock, resetn,
-        output tx, data_out
+        output tx, data_out, rx_fifo_not_empty, tx_fifo_not_full
     );
 endinterface
