@@ -134,17 +134,21 @@ class buff_uart_rx_monitor extends uvm_monitor;
   endfunction
 
   task run_phase(uvm_phase phase);
+    bit prev = 0;
+    int count = 0;
     forever begin
-      collect_data();
-    end
-  endtask
-
-  task collect_data();
-    data_recv = buff_uart_rx_sequence_item::type_id::create("data_recv");
-    @(negedge vif.clk);
-    if (!vif.reset_n) begin
-      data_recv.rx <= vif.rx;
-      monitor_port.write(data_recv);
+      @(negedge vif.clk);
+      if (vif.reset_n) begin
+        count = 0;
+      end else begin
+        if (prev != vif.tx && count) begin
+          data_recv = buff_uart_tx_sequence_item::type_id::create("data_recv");
+          data_recv.tx = vif.tx;
+          data_recv.count = count;
+          monitor_port.write(data_recv);
+        end
+        count = count + 1;
+      end
     end
   endtask
 endclass : buff_uart_rx_monitor
