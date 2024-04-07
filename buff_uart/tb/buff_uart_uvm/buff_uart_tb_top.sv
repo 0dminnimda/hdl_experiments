@@ -4,6 +4,16 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
+`define randomize_eh(transaction) \
+ if (!(transaction.randomize())) begin \
+    `uvm_error(get_type_name(), "Randomization failed for " + transaction.get_type_name()) \
+ end  
+
+`define randomize_with_eh(transaction, constraints) \
+ if (!(transaction.randomize() with constraints)) begin \
+    `uvm_error(get_type_name(), "Randomization with constraints failed for " + transaction.get_type_name()) \
+ end
+
 `ifndef EDAPLAYGROUND
 `include "../../buff_uart.sv"
 `else

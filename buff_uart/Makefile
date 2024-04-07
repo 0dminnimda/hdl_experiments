@@ -43,6 +43,8 @@ wlf:
 # make compile FILE=tb/buff_uart_tb.sv
 # make run MODULE=tb_buff_uart
 
+# vsim tb_top +UVM_TESTNAME=my_test
+
 .PHONY: verilator
 verilator:
 	/usr/local/bin/verilator --binary -j 0 tb/buff_uart_tb.sv -I. -Iif -Itb --top-module tb_buff_uart --assert \
