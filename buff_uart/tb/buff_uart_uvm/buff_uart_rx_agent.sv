@@ -104,8 +104,7 @@ class buff_uart_rx_driver extends uvm_driver #(buff_uart_rx_sequence_item);
 
   task drive_data(buff_uart_rx_sequence_item req);
     vif.rx <= req.rx;
-    repeat (conf.ticks_per_bit * 2) @(posedge vif.clock);
-    // repeat (req.shift ($urandom_range(0, 5))) @(posedge vif.clock);
+    repeat (req.period) @(posedge vif.clock);
   endtask
 endclass : buff_uart_rx_driver
 
