@@ -14,6 +14,9 @@ import uvm_pkg::*;
     `uvm_error(get_type_name(), "Randomization with constraints failed for " + transaction.get_type_name()) \
  end
 
+`define RX_ADDRESS 'd3
+`define TX_ADDRESS 'd4
+
 `ifndef EDAPLAYGROUND
 `include "../../buff_uart.sv"
 `else
@@ -30,8 +33,8 @@ module top;
   import uvm_pkg::*;
 
   buff_uart_if #(
-      .rx_address('d3),
-      .tx_address('d4)
+      .rx_address(`RX_ADDRESS),
+      .tx_address(`TX_ADDRESS)
   ) bui ();
   logic clock, resetn;
 
