@@ -10,14 +10,14 @@ build:
 
 .PHONY: compile
 compile: build
-	- sh ../run_vlog.sh build $(FILE) 1> /dev/null 2> /dev/null
+	- sh ../questa_license/run_vlog.sh build $(FILE) 1> /dev/null 2> /dev/null
 	sleep .2
-	sh ../run_vlog.sh build $(FILE)
+	sh ../questa_license/run_vlog.sh build $(FILE)
 
 .PHONY: run
 run:
 # -keepstdout -geometry 1000x1000+0+0 -do "run"
-	vsim -i build.$(MODULE) \
+	../questa_license/run.sh vsim -i build.$(MODULE) \
 		-displaymsgmode tran \
 		-msgmode tran \
 		-wlfdeleteonquit \
@@ -26,7 +26,7 @@ run:
 
 .PHONY: wlf
 wlf:
-	vsim -view vsim.wlf
+	./questa_license/run.sh vsim -view vsim.wlf
 
 # make compile FILE=tb/addressable_tb.sv
 # make run MODULE=tb_rw_addressable
