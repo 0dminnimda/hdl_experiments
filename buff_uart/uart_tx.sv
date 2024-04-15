@@ -19,6 +19,7 @@ module uart_tx (uart_tx_if.DUT tx_if, input logic clock, logic resetn);
             ticks_until_next_action <= 0;
             tx_if.signal <= 1;
             tx_if.ready <= 1;
+            tx_if.ready <= 1;
         end else if (ticks_until_next_action > 1) begin
             ticks_until_next_action <= ticks_until_next_action - 1;
         end else case(state)
@@ -58,6 +59,17 @@ module uart_tx (uart_tx_if.DUT tx_if, input logic clock, logic resetn);
                 state <= WAIT_FOR_PREMISSION;
                 tx_if.ready <= 1;
             end
+        endcase
+    end
+
+    always_ff @(posedge clock, negedge resetn) begin
+        if (!resetn) begin
+            tx_if.transmitted_byte <= 0;
+        end else if (tx_if.transmitted_byte) begin
+            tx_if.transmitted_byte <= 0;
+        end else if (action) case(state)
+            WAIT_FOR_PREMISSION: tx_if.transmitted_byte <= 0;
+            SENDING_END: tx_if.transmitted_byte <= 1;
         endcase
     end
 endmodule

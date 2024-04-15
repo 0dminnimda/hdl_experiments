@@ -169,7 +169,7 @@ class buff_uart_bus_monitor extends uvm_monitor;
   endtask
 endclass : buff_uart_bus_monitor
 
-class buff_uart_bus_bit_sequence extends uvm_sequence #(buff_uart_bus_sequence_item);
+class buff_uart_bus_sequence extends uvm_sequence #(buff_uart_bus_sequence_item);
   `uvm_object_utils(buff_uart_bus_sequence)
 
   rand int data;
@@ -184,7 +184,7 @@ class buff_uart_bus_bit_sequence extends uvm_sequence #(buff_uart_bus_sequence_i
     if (!uvm_config_db#(buff_uart_bus_config)::get(this, "", "buff_uart_bus_config", conf))
       `uvm_fatal("CONFIG", "Cannot get() conf from uvm_config_db. Have you set() it?")
 
-    for (int i = 0; i < 8; i += 1) begin
+    forever begin
       req = buff_uart_bus_sequence_item::type_id::create("req");
       start_item(req);
 
@@ -200,35 +200,15 @@ class buff_uart_bus_bit_sequence extends uvm_sequence #(buff_uart_bus_sequence_i
 
 endclass : buff_uart_bus_sequence
 
-class buff_uart_bus_sequence extends uvm_sequence #(buff_uart_bus_sequence_item);
-  `uvm_object_utils(buff_uart_bus_sequence)
-
-  buff_uart_bus_bit_sequence bit_seq;
-
-  function new(string name = "buff_uart_bus_sequence");
-    super.new(name);
-  endfunction
-
-  task body();
-    repeat (8) begin
-      bit_seq = buff_uart_bus_bit_sequence::type_id::create("bit_seq");
-
-      `randomize_with_eh(bit_seq, {data inside {[0:2**8-1]};})
-      bit_seq.data = bytes[i];
-
-      bit_seq.start(m_sequencer, this);
-    end
-  endtask
-
-endclass : buff_uart_bus_sequence
+typedef enum logic [0:0] {READ, WRITE} BUS_DIRECTION;
 
 class buff_uart_bus_sequence_item extends uvm_sequence_item;
-  bit bus;
-  rand int period;
+  logic [ADDRESS_WIDTH-1:0] address;
+  BUS_DIRECTION direction;
 
   `uvm_object_utils_begin(buff_uart_bus_sequence_item)
-    `uvm_field_int(bus, UVM_ALL_ON)
-    `uvm_field_int(period, UVM_ALL_ON)
+    `uvm_field_int(address, UVM_ALL_ON)
+    `uvm_field_enum(BUS_DIRECTION, direction, UVM_ALL_ON)
   `uvm_object_utils_end
 
   function new(string name = "buff_uart_bus_sequence_item");
