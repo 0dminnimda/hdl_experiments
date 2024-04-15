@@ -4,6 +4,7 @@ interface buff_uart_if #(parameter
     address_width = 4,
     rx_address = 0,
     tx_address = 0,
+    status_address = 0,
     baud_rate = 9600,
     clock_freq = 460800
 );
@@ -20,11 +21,11 @@ interface buff_uart_if #(parameter
     logic [width-1:0] data_in;
     logic [width-1:0] data_out;
 
-    logic rx_fifo_not_empty;
-    logic tx_fifo_not_full;
+    // logic rx_fifo_not_empty;
+    // logic tx_fifo_not_full;
 
     modport DUT (
         input rx, data_in, active_address, read_enable, write_enable, clock, resetn,
-        output tx, data_out, rx_fifo_not_empty, tx_fifo_not_full
+        output tx, data_out //, rx_fifo_not_empty, tx_fifo_not_full
     );
 endinterface

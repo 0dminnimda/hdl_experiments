@@ -9,7 +9,7 @@ module tb_buff_uart();
     localparam baud_rate = 9600;
     localparam clock_freq = 460800;
 
-    buff_uart_if #(.rx_address('d3), .tx_address('d4), .clock_freq(clock_freq), .baud_rate(baud_rate)) bui();
+    buff_uart_if #(.rx_address('d3), .tx_address('d4), .status_address('d5), .clock_freq(clock_freq), .baud_rate(baud_rate)) bui();
 
     localparam nanoseconds_in_second = 10**9;
     localparam clock_period = nanoseconds_in_second / clock_freq;

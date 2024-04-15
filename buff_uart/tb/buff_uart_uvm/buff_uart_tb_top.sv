@@ -16,6 +16,7 @@ import uvm_pkg::*;
 
 `define RX_ADDRESS 'd3
 `define TX_ADDRESS 'd4
+`define STATUS_ADDRESS 'd5
 
 `ifndef EDAPLAYGROUND
 `include "../../buff_uart.sv"
@@ -34,7 +35,8 @@ module top;
 
   buff_uart_if #(
       .rx_address(`RX_ADDRESS),
-      .tx_address(`TX_ADDRESS)
+      .tx_address(`TX_ADDRESS),
+      .status_address(`STATUS_ADDRESS)
   ) bui ();
   logic clock, resetn;
 

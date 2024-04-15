@@ -199,7 +199,7 @@ module top;
   import my_pkg::*;
   
   
-  buff_uart_if #(.rx_address('d3), .tx_address('d4)) bui();
+  buff_uart_if #(.rx_address('d3), .tx_address('d4), .status_address('d5)) bui();
   logic clock, resetn;
 
   buff_uart dut(bui, clock, resetn);

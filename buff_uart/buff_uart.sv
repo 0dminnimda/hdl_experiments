@@ -37,6 +37,13 @@ module buff_uart (buff_uart_if.DUT bui);
     ) tx_addr_if();
     addressable tx_addr(tx_addr_if);
 
+    addressable_if #(
+        .addressed_direction(WRITE),
+        .address_width(bui.address_width),
+        .self_address(bui.status_address)
+    ) status_addr_if();
+    addressable status_addr(status_addr_if);
+
     assign rx_if.signal = bui.rx;
     assign bui.tx = tx_if.signal;
 
@@ -56,6 +63,7 @@ module buff_uart (buff_uart_if.DUT bui);
 
     assign rx_addr_if.active_address = bui.active_address;
     assign tx_addr_if.active_address = bui.active_address;
+    assign status_addr_if.active_address = bui.active_address;
 
     assign rx_addr_if.write_enable_in = bui.write_enable;
     assign rx_fifo_if.write_enable = rx_addr_if.write_enable_out;
@@ -63,9 +71,20 @@ module buff_uart (buff_uart_if.DUT bui);
     assign tx_addr_if.read_enable_in = bui.read_enable;
     assign tx_fifo_if.read_enable = tx_addr_if.read_enable_out;
 
-    assign bui.data_out = rx_fifo_if.data_out;
+    assign status_addr_if.write_enable_in = bui.write_enable;
+    always_ff @(posedge bui.clock, posedge bui.resetn) begin
+        if (!resetn) begin
+            bui.data_out <= 0;
+        end else if (status_addr_if.write_enable_out) begin
+            bui.data_out <= {rx_fifo_if.empty, tx_fifo_if.full};
+        end else if (rx_fifo_if.write_enable) begin
+            bui.data_out = rx_fifo_if.data_out;
+        end
+    end
+
+    // assign bui.data_out = rx_fifo_if.data_out;
     assign tx_fifo_if.data_in = bui.data_in;
 
-    assign bui.rx_fifo_not_empty = !rx_fifo_if.empty;
-    assign bui.tx_fifo_not_full = !tx_fifo_if.full;
+    // assign bui.rx_fifo_not_empty = !rx_fifo_if.empty;
+    // assign bui.tx_fifo_not_full = !tx_fifo_if.full;
 endmodule
