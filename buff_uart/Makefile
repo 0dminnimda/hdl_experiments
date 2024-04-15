@@ -50,9 +50,55 @@ verilator:
 	/usr/local/bin/verilator --binary -j 0 tb/buff_uart_tb.sv -I. -Iif -Itb --top-module tb_buff_uart --assert \
 		-Wno-CASEINCOMPLETE -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND -Wno-BLKLOOPINIT -Wno-MULTIDRIVEN
 
+.PHONY: verilator_dr
+verilator_dr:
+	verilator --binary -j 0 tb/buff_uart_tb.sv -I. -Iif -Itb --top-module tb_buff_uart --assert \
+		-Wno-CASEINCOMPLETE -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND -Wno-BLKLOOPINIT -Wno-MULTIDRIVEN
+
 .PHONY: verilator_run
 verilator_run:
 	./obj_dir/Vtb_buff_uart
+
+
+
+.PHONY: icarus_win
+icarus_win:
+	/c/msys64/mingw64/bin/iverilog \
+		-g2005-sv -s top -I C:/Tools/uvm/1800.2-2020-1.1/src \
+		-o testbench testbench.sv
+	# "/c/Tools/uvm/1800.2-2020-1.1/src/uvm_pkg.sv"
+
+.PHONY: icarus_win_run
+icarus_win_run:
+	/c/msys64/mingw64/bin/vvp testbench
+
+
+.PHONY: icarus_wsl
+icarus_wsl:
+	# iverilog \
+	# 	-s top -I /mnt/c/Tools/uvm/1800.2-2020-1.1/src \
+	# 	-o testbench testbench.sv
+	iverilog \
+		-s tb_buff_uart -I. -Itb -Iif \
+		-o testbench tb/buff_uart_tb.sv
+	# /mnt/c/Tools/uvm/1800.2-2020-1.1/src/uvm_pkg.sv
+
+.PHONY: icarus_wsl_run
+icarus_wsl_run:
+	vvp testbench
+
+
+# .PHONY: icarus_dr
+# icarus_dr:
+# 	iverilog \
+# 		-s top -I /mnt/c/Tools/uvm/1800.2-2020-1.1/src \
+# 		-o testbench testbench.sv
+# 	# /mnt/c/Tools/uvm/1800.2-2020-1.1/src/uvm_pkg.sv
+
+# .PHONY: icarus_dr_run
+# icarus_dr_run:
+# 	vvp testbench
+
 
 .PHONY: clean
 clean:
