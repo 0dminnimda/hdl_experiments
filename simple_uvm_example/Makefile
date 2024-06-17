@@ -1,4 +1,5 @@
-UVM_PATH = $(shell realpath ~/UVM/1800.2-2020-1.1)
+# UVM_PATH = $(shell realpath ~/UVM/1800.2-2020-1.1)
+UVM_PATH = $(shell realpath ~/uvm-1.2)
 MODEL_SIM_PATH = $(shell realpath ~/intelFPGA/20.1/modelsim_ase/)
 MSI_FILE = $(MODEL_SIM_PATH)/modelsim.ini
 
@@ -10,6 +11,8 @@ uvm:
 	# vlog -64 -lint -modelsimini $(MSI_FILE) -quiet -sv17compat -work $(LIB_UVM) $(UVM_PATH)/src/uvm_pkg.sv +incdir+$(UVM_PATH)/src
 	# vlog -64 -lint -modelsimini $(MSI_FILE) -quiet -sv17compat -work $(LIB_UVM) $(UVM_PATH)/src/uvm.sv     +incdir+$(UVM_PATH)/src
 
+	# get from http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
+
 
 .PHONY: com
 com:
@@ -19,7 +22,7 @@ com:
 	# vlib work && vlog -sv -stats=none $(UVM_PATH)/src/uvm_pkg.sv +incdir+$(UVM_PATH)/src design.sv testbench.sv && vsim -c -do "vsim +UVM_VERBOSITY=UVM_HIGH +access+r; run -all; exit"
 
 	# vlog -reportprogress 300 -work work -sv -stats=none $(UVM_PATH)/src/uvm_pkg.sv testbench.sv +incdir+$(UVM_PATH)/src
-	vlog -reportprogress 300 -work work -sv -stats=none +incdir+$(UVM_PATH)/src +define+CL_USE_MODELSIM -ccflags "-DQUESTA" $(UVM_PATH)/src/dpi/uvm_dpi.cc $(UVM_PATH)/src/uvm_pkg.sv testbench.sv
+	vlog -reportprogress 300 -work work -sv -stats=none +incdir+$(UVM_PATH)/src +define+CL_USE_MODELSIM -ccflags "-DQUESTA" $(UVM_PATH)/src/uvm_pkg.sv $(UVM_PATH)/src/dpi/uvm_dpi.cc testbench.sv
 
 
 .PHONY: run
