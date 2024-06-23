@@ -2,6 +2,7 @@ Questa:
 
 1. Go to https://www.intel.com/content/www/us/en/software-kit/825312/questa-intel-fpgas-standard-edition-software-version-23-1-1.html
 2. It will redirect you to somewhere like this: https://cdrdv2.intel.com/v1/dl/getContent/825312/825315?filename=QuestaSetup-23.1std.1.993-windows.exe
+3. When running installer, chose Starter Edition
 
 License:
 
