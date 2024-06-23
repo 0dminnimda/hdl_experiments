@@ -26,7 +26,7 @@ com:
 
 .PHONY: run
 run:
-# -keepstdout -geometry 1000x1000+0+0 -do "run"
+	# -keepstdout -geometry 1000x1000+0+0 -do "run"
 	../questa_license/run.sh vsim -i work.$(MODULE) \
 		-displaymsgmode tran \
 		-msgmode tran \
