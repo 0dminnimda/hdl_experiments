@@ -1,6 +1,12 @@
 # C:/intelFPGA/18.1/modelsim_ase/win32aloem
 
-PWD=$(shell pwd)
+PWD_W = $(shell (exec 2>/dev/null; cd / && pwd -W ) | grep ':' >/dev/null && echo "pwd -W" || echo "pwd")
+
+# UVM_PATH = $(shell realpath ~/UVM/1800.2-2020-1.1)
+UVM_PATH = $(shell (cd ~/uvm-1.2; $(PWD_W)))
+MODEL_SIM_PATH = $(shell realpath ~/intelFPGA/20.1/modelsim_ase/)
+MSI_FILE = $(MODEL_SIM_PATH)/modelsim.ini
+
 FILE="mod.sv"
 
 .PHONY: build
