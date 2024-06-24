@@ -6,15 +6,6 @@ MODEL_SIM_PATH = $(shell realpath ~/intelFPGA/20.1/modelsim_ase/)
 MSI_FILE = $(MODEL_SIM_PATH)/modelsim.ini
 
 
-.PHONY: uvm
-uvm:
-	# get from http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
-	wget -nc http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
-	mkdir -p ~/uvm-1.2
-	- tar -xvzf uvm-1.2.tar.gz -C ~/
-	rm uvm-1.2.tar.gz
-
-
 .PHONY: com
 com:
 	../questa_license/run.sh vlog \
@@ -33,6 +24,15 @@ run:
 		-wlfdeleteonquit \
 		> /dev/null 2>&1 \
 		&
+
+
+.PHONY: uvm
+uvm:
+	# get from http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
+	wget -nc http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
+	mkdir -p ~/uvm-1.2
+	- tar -xvzf uvm-1.2.tar.gz -C ~/
+	rm uvm-1.2.tar.gz
 
 
 .PHONY: verilator

@@ -10,7 +10,11 @@ build:
 
 .PHONY: compile
 compile: build
-	../questa_license/run.sh vlog -reportprogress 300 -work build $(FILE) -sv
+	../questa_license/run.sh vlog \
+		-reportprogress 300 -work build -sv -stats=none -lint \
+		+incdir+$(UVM_PATH)/src +define+CL_USE_MODELSIM \
+		-ccflags "-DQUESTA" -ccflags "-Wno-missing-declarations" -ccflags "-Wno-return-type" \
+		$(UVM_PATH)/src/uvm_pkg.sv $(UVM_PATH)/src/dpi/uvm_dpi.cc $(FILE)
 
 .PHONY: run
 run:
@@ -21,6 +25,14 @@ run:
 		-wlfdeleteonquit \
 		> /dev/null 2>&1 \
 		&
+
+.PHONY: uvm
+uvm:
+	# get from http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
+	wget -nc http://www.accellera.org/images/downloads/standards/uvm/uvm-1.2.tar.gz
+	mkdir -p ~/uvm-1.2
+	- tar -xvzf uvm-1.2.tar.gz -C ~/
+	rm uvm-1.2.tar.gz
 
 .PHONY: wlf
 wlf:
