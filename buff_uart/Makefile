@@ -14,7 +14,7 @@ compile: build
 
 .PHONY: run
 run:
-# -keepstdout -geometry 1000x1000+0+0 -do "run"
+	# -keepstdout -geometry 1000x1000+0+0 -do "run"
 	../questa_license/run.sh vsim -i build.$(MODULE) \
 		-displaymsgmode tran \
 		-msgmode tran \
@@ -24,7 +24,7 @@ run:
 
 .PHONY: wlf
 wlf:
-	../questa_license/run_vlog.sh vsim -view vsim.wlf
+	../questa_license/run.sh vsim -view vsim.wlf
 
 # make compile FILE=tb/addressable_tb.sv
 # make run MODULE=tb_rw_addressable

@@ -10,9 +10,9 @@ build:
 
 .PHONY: compile
 compile: build
-	- sh ../run_vlog.sh build $(FILE) 1> /dev/null 2> /dev/null
+	- sh ../run.sh vlog -reportprogress 300 -work build $(FILE) -sv 1> /dev/null 2> /dev/null
 	sleep .2
-	sh ../run_vlog.sh build $(FILE)
+	sh ../run.sh vlog -reportprogress 300 -work build $(FILE) -sv
 
 .PHONY: run
 run:
