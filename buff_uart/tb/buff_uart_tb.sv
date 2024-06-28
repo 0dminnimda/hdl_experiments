@@ -5,7 +5,7 @@
 `endif
 
 
-module tb_buff_uart();
+module tb_buff_uart;
     localparam baud_rate = 9600;
     localparam clock_freq = 460800;
 

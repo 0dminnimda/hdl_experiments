@@ -73,7 +73,7 @@ module buff_uart (buff_uart_if.DUT bui);
 
     assign status_addr_if.write_enable_in = bui.write_enable;
     always_ff @(posedge bui.clock, posedge bui.resetn) begin
-        if (!resetn) begin
+        if (!bui.resetn) begin
             bui.data_out <= 0;
         end else if (status_addr_if.write_enable_out) begin
             bui.data_out <= {rx_fifo_if.empty, rx_fifo_if.full, tx_fifo_if.empty, tx_fifo_if.full};
@@ -85,7 +85,7 @@ module buff_uart (buff_uart_if.DUT bui);
     assign tx_fifo_if.data_in = bui.data_in;
 
     assign bui.recieved_byte = rx_if.ready;
-    assign bui.transmitted_byte = rx_if.transmitted_byte;
+    assign bui.transmitted_byte = tx_if.transmitted_byte;
     // assign bui.rx_fifo_not_empty = !rx_fifo_if.empty;
     // assign bui.tx_fifo_not_full = !tx_fifo_if.full;
 endmodule

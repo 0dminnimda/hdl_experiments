@@ -67,7 +67,7 @@ module uart_tx (uart_tx_if.DUT tx_if, input logic clock, logic resetn);
             tx_if.transmitted_byte <= 0;
         end else if (tx_if.transmitted_byte) begin
             tx_if.transmitted_byte <= 0;
-        end else if (action) case(state)
+        end else case(state)
             WAIT_FOR_PREMISSION: tx_if.transmitted_byte <= 0;
             SENDING_END: tx_if.transmitted_byte <= 1;
         endcase

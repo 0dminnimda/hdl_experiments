@@ -26,8 +26,12 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
     logic reading_the_last_bit;
     assign reading_the_last_bit = bit_count >= rx_if.width - 1;
 
-    always_ff @(posedge clock) begin
-        if (action) case(state)
+    always_ff @(posedge clock, negedge resetn) begin
+        if (!resetn) begin
+            ticks_until_next_action <= 0;
+        end else if (ticks_until_next_action > 0) begin
+            ticks_until_next_action <= ticks_until_next_action - 1;
+        end else if (action) case(state)
             WAIT_FOR_START_BIT: begin
                 if (first_bit) begin
                     ticks_until_next_action <= half_ticks_per_bit;
@@ -57,14 +61,6 @@ module uart_rx (uart_rx_if.DUT rx_if, input logic clock, logic resetn);
             WAIT_FOR_START_BIT: if (first_bit) bit_count <= 0;
             RECEIVING_DATA: bit_count <= bit_count + 1;
         endcase
-    end
-
-    always_ff @(posedge clock, negedge resetn) begin
-        if (!resetn) begin
-            ticks_until_next_action <= 0;
-        end else if (ticks_until_next_action > 0) begin
-            ticks_until_next_action <= ticks_until_next_action - 1;
-        end
     end
 
     always_ff @(posedge clock) begin
