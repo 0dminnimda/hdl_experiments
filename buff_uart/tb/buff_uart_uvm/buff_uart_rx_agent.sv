@@ -15,7 +15,7 @@ endclass : buff_uart_rx_sequence_item
 
 typedef uvm_sequencer#(buff_uart_rx_sequence_item) buff_uart_rx_sequencer;
 
-class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
+typedef buff_uart_rx_bit_sequence;
 
 class buff_uart_rx_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
   `uvm_object_utils(buff_uart_rx_sequence)
