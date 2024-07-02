@@ -66,7 +66,6 @@ class buff_uart_tx_monitor extends uvm_monitor;
         if (prev != vif.tx && count) begin
           data_recv = buff_uart_tx_sequence_item::type_id::create("data_recv");
           data_recv.tx = vif.tx;
-          data_recv.count = count;
           monitor_port.write(data_recv);
         end
         count = count + 1;

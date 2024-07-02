@@ -49,9 +49,6 @@ class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_ite
       start_item(req);
 
       `randomize_with_eh(req, {period inside {[conf.ticks_per_bit_min : conf.ticks_per_bit_max]};})
-      // if (!req.randomize() with {period inside {[conf.ticks_per_bit_min : conf.ticks_per_bit_max]};}) begin
-      //   `uvm_error("RANDOMIZE_FAILED", "Randomization failed for buff_uart_rx_sequence_item")
-      // end
       req.rx = data[i];
 
       finish_item(req);
@@ -66,7 +63,7 @@ task buff_uart_rx_sequence::body();
       
     `randomize_with_eh(bit_seq, {data inside {[0:2**8-1]};})
 
-    it_seq.start(m_sequencer, this);
+    bit_seq.start(m_sequencer, this);
   end
 endtask
 
@@ -102,10 +99,9 @@ class buff_uart_rx_monitor extends uvm_monitor;
       if (vif.reset_n) begin
         count = 0;
       end else begin
-        if (prev != vif.tx && count) begin
+        if (prev != vif.rx && count) begin
           data_recv = buff_uart_tx_sequence_item::type_id::create("data_recv");
-          data_recv.tx = vif.tx;
-          data_recv.count = count;
+          data_recv.rx = vif.rx;
           monitor_port.write(data_recv);
         end
         count = count + 1;
@@ -137,7 +133,7 @@ class buff_uart_rx_driver extends uvm_driver #(buff_uart_rx_sequence_item);
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
     @(negedge vif.clock) begin
-      bui.resetn <= 0;
+      vif.resetn <= 0;
     end
 
     forever begin
@@ -171,7 +167,7 @@ class buff_uart_rx_config extends uvm_object;
   endfunction
 
   function void connect_phase(uvm_phase phase);
-    ticks_per_bit = conf.vif.clock_freq / conf.vif.baud_rate;
+    ticks_per_bit = vif.clock_freq / vif.baud_rate;
   endfunction
 endclass
 

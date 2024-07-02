@@ -1,13 +1,13 @@
 `timescale 1us / 1us
 
 `define randomize_eh(transaction) \
- if (!(transaction.randomize())) begin \
-    `uvm_error(get_type_name(), "Randomization failed for " + transaction.get_type_name()) \
+ if (!((transaction).randomize())) begin \
+    `uvm_error(get_type_name(), $sformatf("Randomization with constraints failed for %s", (transaction).get_type_name())) \
  end  
 
 `define randomize_with_eh(transaction, constraints) \
  if (!(transaction.randomize() with constraints)) begin \
-    `uvm_error(get_type_name(), "Randomization with constraints failed for " + transaction.get_type_name()) \
+    `uvm_error(get_type_name(), $sformatf("Randomization with constraints failed for %s", transaction.get_type_name())) \
  end
 
 `define RX_ADDRESS 'd3
