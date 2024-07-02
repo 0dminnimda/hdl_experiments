@@ -30,13 +30,13 @@ class buff_uart_rx_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
 endclass : buff_uart_rx_sequence
 
 class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
-  `uvm_object_utils(buff_uart_rx_sequence)
+  `uvm_object_utils(buff_uart_rx_bit_sequence)
 
   rand int data;
   buff_uart_rx_config conf;
   buff_uart_rx_sequence_item req;
 
-  function new(string name = "buff_uart_rx_sequence");
+  function new(string name = "buff_uart_rx_bit_sequence");
     super.new(name);
   endfunction
 
@@ -95,12 +95,12 @@ class buff_uart_rx_monitor extends uvm_monitor;
     bit prev = 0;
     int count = 0;
     forever begin
-      @(negedge vif.clk);
-      if (vif.reset_n) begin
+      @(negedge vif.clock);
+      if (vif.resetn) begin
         count = 0;
       end else begin
         if (prev != vif.rx && count) begin
-          data_recv = buff_uart_tx_sequence_item::type_id::create("data_recv");
+          data_recv = buff_uart_rx_sequence_item::type_id::create("data_recv");
           data_recv.rx = vif.rx;
           monitor_port.write(data_recv);
         end

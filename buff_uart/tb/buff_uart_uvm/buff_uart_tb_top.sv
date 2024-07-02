@@ -43,20 +43,15 @@ module top;
       .status_address(`STATUS_ADDRESS),
       .address_width(`ADDRESS_WIDTH)
   ) bui ();
-  logic clock, resetn;
 
-  buff_uart dut (
-      bui,
-      clock,
-      resetn
-  );
+  buff_uart dut (bui);
 
   localparam nanoseconds_in_second = 10 ** 9;
   localparam clock_period = nanoseconds_in_second / bui.clock_freq;
 
   initial begin
-    clock = 0;
-    forever #(clock_period / 2) clock = ~clock;
+    bui.clock = 0;
+    forever #(clock_period / 2) bui.clock = ~bui.clock;
   end
 
   initial begin

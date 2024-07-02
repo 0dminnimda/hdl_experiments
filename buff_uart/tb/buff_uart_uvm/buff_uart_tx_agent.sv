@@ -59,8 +59,8 @@ class buff_uart_tx_monitor extends uvm_monitor;
     bit prev = 0;
     int count = 0;
     forever begin
-      @(negedge vif.clk);
-      if (vif.reset_n) begin
+      @(negedge vif.clock);
+      if (vif.resetn) begin
         count = 0;
       end else begin
         if (prev != vif.tx && count) begin
@@ -110,7 +110,7 @@ class buff_uart_tx_agent_top extends uvm_env;
       `uvm_fatal("CONFIG_ENV", "cannot get() env_config from uvm_config_db. Have you set() it?")
 
     uvm_config_db#(buff_uart_tx_config)::set(this, "tx_agent*", "buff_uart_tx_config",
-                                             env_conf.rx_conf);
+                                             env_conf.tx_conf);
     tx_agent = buff_uart_tx_agent::type_id::create("tx_agent", this);
     super.build_phase(phase);
   endfunction
