@@ -7,5 +7,6 @@ obj_dir
 **/*.vstf
 **/*.vcd
 *.zip
-_hdl_checker
+_hdl_checker/
+.hdl_checker/
 
