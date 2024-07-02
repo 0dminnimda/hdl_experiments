@@ -1,20 +1,9 @@
-class env_config extends uvm_object;
-  `uvm_object_utils(env_config)
-
-  virtual buff_uart_if vif;
-  buff_uart_tx_config tx_conf;
-  buff_uart_rx_config rx_conf;
-
-  function new(string name = "env_config");
-    super.new(name);
-  endfunction : new
-endclass : env_config
-
 class uart_env extends uvm_env;
   `uvm_component_utils(uart_env)
 
   env_config env_conf;
-  virtual_sequencer v_seqrh;
+  buff_uart_tx_agent_top wtop;
+  buff_uart_rx_agent_top rtop;
 
   function new(string name = "uart_env", uvm_component parent);
     super.new(name, parent);

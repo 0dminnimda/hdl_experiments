@@ -1,9 +1,5 @@
 `timescale 1us / 1us
 
-`include "uvm.sv"
-`include "uvm_macros.svh"
-import uvm_pkg::*;
-
 `define randomize_eh(transaction) \
  if (!(transaction.randomize())) begin \
     `uvm_error(get_type_name(), "Randomization failed for " + transaction.get_type_name()) \
@@ -25,13 +21,20 @@ import uvm_pkg::*;
 `include "buff_uart.sv"
 `endif
 
-`include "env.sv"
+package user_pkg;
+
+import uvm_pkg::*;
+`include "uvm_macros.svh"
+
+`include "env_conf.sv"
 `include "buff_uart_tx_agent.sv"
 `include "buff_uart_rx_agent.sv"
+`include "env.sv"
 `include "base_test.sv"
-
+endpackage
 
 module top;
+  import user_pkg::*;
   import uvm_pkg::*;
 
   buff_uart_if #(

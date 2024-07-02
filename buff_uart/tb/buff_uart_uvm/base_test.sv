@@ -4,8 +4,6 @@ class base_test extends uvm_test;
   virtual buff_uart_if vif;
   uart_env envh;
   env_config env_conf;
-  // buff_uart_tx_config tx_conf;
-  // buff_uart_rx_config rx_conf;
 
   function new(string name = "base_test", uvm_component parent);
     super.new(name, parent);
@@ -14,13 +12,13 @@ class base_test extends uvm_test;
   function void configuration();
     env_conf.tx_conf = buff_uart_tx_config::type_id::create("tx_conf");
     if (!uvm_config_db#(virtual buff_uart_if)::get(
-            this, "", $sformatf("vif_%0d", i), env_conf.tx_conf.vif
+            this, "", "vif", env_conf.tx_conf.vif
         ))
       `uvm_fatal("VIF CONFIG", "cannot get() interface vif from uvm_config_db. Have you set() it?")
 
     env_conf.rx_conf = buff_uart_rx_config::type_id::create("rx_conf");
     if (!uvm_config_db#(virtual buff_uart_if)::get(
-            this, "", $sformatf("vif_%0d", i), env_conf.rx_conf.vif
+            this, "", "vif", env_conf.rx_conf.vif
         ))
       `uvm_fatal("VIF CONFIG", "cannot get() interface vif from uvm_config_db. Have you set() it?")
   endfunction
@@ -34,11 +32,10 @@ class base_test extends uvm_test;
   endfunction
 
   task run_phase(uvm_phase phase);
-    buff_uart_rx_sequence recv_req;
-    send_req = new("send_seq");
-    recv_req = new("recv_req");
+    buff_uart_rx_sequence recv_seq;
+    recv_seq = new("recv_seq");
     phase.raise_objection(this);
-    recv_req.start(envh.rx_top.rx_agent.m_sequencer);
+    recv_seq.start(envh.rx_top.rx_agent.m_sequencer);
     phase.drop_objection(this);
   endtask
 
@@ -47,3 +44,4 @@ class base_test extends uvm_test;
     print();
   endfunction
 endclass : base_test
+
