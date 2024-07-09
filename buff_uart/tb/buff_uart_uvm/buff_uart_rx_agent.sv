@@ -1,10 +1,8 @@
 class buff_uart_rx_sequence_item extends uvm_sequence_item;
-  bit rx;
-  rand int period;
+  int bits;
 
   `uvm_object_utils_begin(buff_uart_rx_sequence_item)
-    `uvm_field_int(rx, UVM_ALL_ON)
-    `uvm_field_int(period, UVM_ALL_ON)
+    `uvm_field_int(bits, UVM_ALL_ON)
   `uvm_object_utils_end
 
   function new(string name = "buff_uart_rx_sequence_item");
@@ -15,28 +13,14 @@ endclass : buff_uart_rx_sequence_item
 
 typedef uvm_sequencer#(buff_uart_rx_sequence_item) buff_uart_rx_sequencer;
 
-typedef buff_uart_rx_bit_sequence;
-
 class buff_uart_rx_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
   `uvm_object_utils(buff_uart_rx_sequence)
-
-  buff_uart_rx_bit_sequence bit_seq;
-
-  function new(string name = "buff_uart_rx_sequence");
-    super.new(name);
-  endfunction
-
-  extern task body();
-endclass : buff_uart_rx_sequence
-
-class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_item);
-  `uvm_object_utils(buff_uart_rx_bit_sequence)
 
   rand int data;
   buff_uart_rx_config conf;
   buff_uart_rx_sequence_item req;
 
-  function new(string name = "buff_uart_rx_bit_sequence");
+  function new(string name = "buff_uart_rx_sequence");
     super.new(name);
   endfunction
 
@@ -44,28 +28,13 @@ class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_ite
     if (!uvm_config_db#(buff_uart_rx_config)::get(null, get_full_name(), "buff_uart_rx_config", conf))
       `uvm_fatal("CONFIG", "Cannot get() conf from uvm_config_db. Have you set() it?")
 
-    for (int i = 0; i < 8; i += 1) begin
-      req = buff_uart_rx_sequence_item::type_id::create("req");
-      start_item(req);
-
-      `randomize_with_eh(req, {period inside {[conf.ticks_per_bit_min : conf.ticks_per_bit_max]};})
-      req.rx = data[i];
-
-      finish_item(req);
-    end
+    req = buff_uart_rx_sequence_item::type_id::create("req");
+    req.bits = data;
+    start_item(req);
+    finish_item(req);
   endtask
 
 endclass : buff_uart_rx_bit_sequence
-
-task buff_uart_rx_sequence::body();
-  repeat (8) begin
-    bit_seq = buff_uart_rx_bit_sequence::type_id::create("bit_seq");
-      
-    `randomize_with_eh(bit_seq, {data inside {[0:2**8-1]};})
-
-    bit_seq.start(m_sequencer, this);
-  end
-endtask
 
 class buff_uart_rx_monitor extends uvm_monitor;
   `uvm_component_utils(buff_uart_rx_monitor)
@@ -146,7 +115,9 @@ class buff_uart_rx_driver extends uvm_driver #(buff_uart_rx_sequence_item);
   endtask
 
   task drive_data(buff_uart_rx_sequence_item req);
-    vif.rx <= req.rx;
+    for (int i = 0; i < 8; i += 1) begin
+      req.rx = req.data[i];
+    end
     repeat (req.period) @(posedge vif.clock);
   endtask
 endclass : buff_uart_rx_driver

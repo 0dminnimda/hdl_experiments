@@ -36,7 +36,17 @@ class base_test extends uvm_test;
     recv_seq = new("recv_seq");
     phase.raise_objection(this);
     recv_seq.start(envh.rx_top.rx_agent.m_sequencer);
+    repeat (8) begin
+      one_cycle();
+    end
     phase.drop_objection(this);
+  endtask
+
+  task one_cycle();
+      buff_uart_rx_sequence seq = buff_uart_rx_sequence::type_id::create("seq");  
+      `randomize_with_eh(seq, {data inside {[0:2**8-1]};})
+
+      seq.start(m_sequencer, this);
   endtask
 
   virtual function void end_of_elaboration();
