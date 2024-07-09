@@ -17,6 +17,11 @@
 
 - [X] Вывести recieved_queue_not_empty, transmition_queue_not_full
 - [ ] Add status register to fully embrase the bus end (all transactions are like "read from address"/"write to address")
+- [ ] Make rx agent monitor read whole bytes
+- [ ] Make tx agent read whole bytes via uart interface
+- [ ] Split DUT interface into rx, tx and bus
+- [ ] Make the test call rx seqencer, then query statua throwgh bus, then when data recieved, send read of data via bus, then write it back, then read from tx analysis port the funal transmitted data and compare with initial.
+- [ ] Make bus seqencers
 
 МИКР:
 - [ ] 1 пример
