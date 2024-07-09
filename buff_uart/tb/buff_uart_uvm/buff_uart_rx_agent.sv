@@ -41,7 +41,7 @@ class buff_uart_rx_bit_sequence extends uvm_sequence #(buff_uart_rx_sequence_ite
   endfunction
 
   task body();
-    if (!uvm_config_db#(buff_uart_rx_config)::get(this, "", "buff_uart_rx_config", conf))
+    if (!uvm_config_db#(buff_uart_rx_config)::get(null, get_full_name(), "buff_uart_rx_config", conf))
       `uvm_fatal("CONFIG", "Cannot get() conf from uvm_config_db. Have you set() it?")
 
     for (int i = 0; i < 8; i += 1) begin
