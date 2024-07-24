@@ -2,9 +2,10 @@ interface buff_uart_if #(parameter
     width = 8,
     fifo_length = 16,
     address_width = 4,
-    rx_address = 0,
-    tx_address = 0,
-    status_address = 0,
+    // FIX: remove those 3 hardcoded values
+	    rx_address = 3,
+	    tx_address = 4,
+	    status_address = 5,
     baud_rate = 9600,
     clock_freq = 460800
 );

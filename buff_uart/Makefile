@@ -59,6 +59,9 @@ wlf:
 # make compile FILE=tb/buff_uart_tb.sv
 # make run MODULE=tb_buff_uart
 
+# make compile FILE=tb/buff_uart_uvm/buff_uart_tb_top.sv
+# make run MODULE=top
+
 # vsim tb_top +UVM_TESTNAME=my_test
 
 .PHONY: verilator
